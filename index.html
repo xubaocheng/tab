@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+</head>
+<style>
+*{ margin:0; padding: 0;}
+.box{ width:600px; margin:0 auto; text-align:center; position: relative;}
+.box input{width:180px; height: 20px;}
+.box div{ width: 100%; height: 500px; border: 1px solid #ccc; line-height: 500px; font-size:50px; color:blue; display: none;}
+input.active{ background:yellow;}
+div.active{ display: block; background:pink;}
+a{position: absolute;top:0; background: blue; text-decoration:none; width: 20px; height: 20px; color:#fff;}
+#prev{ left:0;}
+#next{right:0;}
+
+</style>
+<script>
+window.onload=function ()
+{
+
+    var oBox=document.getElementById('box');
+    var aBtn=oBox.getElementsByTagName('input');
+    var aDiv=oBox.getElementsByTagName('div');
+    var oPrev=document.getElementById('prev');
+    var oNext=document.getElementById('next');
+    var now=0;
+    var timer=null;
+    for(var i=0; i<aBtn.length; i++)
+    {
+
+        (function (index){
+            aBtn[i].onclick=function ()
+            {
+                now=index;
+                tab();
+            };
+        })(i);
+    }
+  
+    oNext.onclick=function ()
+    {
+        now++;
+        if( now == aBtn.length)
+        {
+            now=0;
+        }
+        tab();
+
+    };
+    oPrev.onclick=function ()
+    {
+        now--;
+        if(now<0)
+        {
+            now=aBtn.length-1;
+        }
+        tab();
+    };
+    //自动播放
+    clearInterval(timer)
+    timer=setInterval(function (){
+        now++;
+        if( now == aBtn.length)
+        {
+            now=0;
+        }
+        tab();
+    },1000);
+
+    oBox.onmouseover=function ()
+    {
+        clearInterval(timer); 
+    };
+    oBox.onmouseout=function ()
+    {
+        timer=setInterval(function (){
+            now++;
+            if( now == aBtn.length)
+            {
+                now=0;
+            }
+        tab();
+    },1000);
+    };
+    function tab()
+    {
+        for(var i=0; i<aBtn.length;i++)
+        {
+            aBtn[i].className='';
+            aDiv[i].className='';
+        }
+        aBtn[now].className='active';
+        aDiv[now].className='active';
+
+    };
+
+};
+</script>
+<body>
+    <div class="box" id="box">
+        <a id="prev" href="javascript:;">←</a>
+        <a id="next" href="javascript:;">→</a>
+        <input class="active" type="button" value="按钮一" />
+        <input type="button" value="按钮二" />
+        <input type="button" value="按钮三" />
+        <div class="active">一</div>
+        <div>二</div>
+        <div>三</div>
+    </div>
+</body>
+</html>
